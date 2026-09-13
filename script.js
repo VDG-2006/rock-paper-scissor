@@ -9,6 +9,8 @@ let play=function(){
     let computer_choice=choice_arr[Math.floor(Math.random()*3)];
 
     play_content.style.display="block";
+    document.querySelector(".winner").textContent="";
+    document.querySelector(".computer-choice").textContent="";
 
     const rock_btn=document.querySelector(".rock");
     const paper_btn=document.querySelector(".paper");
@@ -19,6 +21,16 @@ let play=function(){
 
         document.querySelector("#user").textContent=userScore;
         document.querySelector("#computer").textContent=computerScore;
+
+        if(userScore==5){
+            document.querySelector(".winner").textContent="User Wins!";
+            computerScore=0;
+            userScore=0;
+        } else if(computerScore==5){
+            document.querySelector(".winner").textContent="Computer Wins!";
+            computerScore=0;
+            userScore=0;
+        }
 
         play_content.style.display="none";
     }
