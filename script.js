@@ -1,66 +1,65 @@
 let userScore=0;
 let computerScore=0;
+let computer_choice="";
+let isGameOver=false;
 
 const play_content=document.querySelector(".hidden");
+const comp_choice_display=document.querySelector(".computer-choice");
+const winnerDisplay=document.querySelector(".winner");
+const userScoreDisplay=document.querySelector("#user");
+const computerScoreDisplay=document.querySelector("#computer");
+
+const rockBtn=document.querySelector(".rock");
+const paperBtn=document.querySelector(".paper");
+const scissorBtn=document.querySelector(".scissor");
+const playBtn=document.querySelector("#btn");
+
 play_content.style.display="none";
 
-let play=function(){
-    let choice_arr=['Rock','Paper','Scissor'];
-    let computer_choice=choice_arr[Math.floor(Math.random()*3)];
+function play(){
 
-    play_content.style.display="block";
-    document.querySelector(".winner").textContent="";
-    document.querySelector(".computer-choice").textContent="";
-
-    const rock_btn=document.querySelector(".rock");
-    const paper_btn=document.querySelector(".paper");
-    const scissor_btn=document.querySelector(".scissor");
-
-    function updateInfo(){
-        document.querySelector(".computer-choice").textContent="Computer Choice: "+computer_choice;
-
-        document.querySelector("#user").textContent=userScore;
-        document.querySelector("#computer").textContent=computerScore;
-
-        if(userScore==5){
-            document.querySelector(".winner").textContent="User Wins!";
-            computerScore=0;
-            userScore=0;
-        } else if(computerScore==5){
-            document.querySelector(".winner").textContent="Computer Wins!";
-            computerScore=0;
-            userScore=0;
-        }
-
-        play_content.style.display="none";
+    if(isGameOver){
+        userScore=0;
+        computerScore=0;
+        userScoreDisplay.textContent=userScore;
+        computerScoreDisplay.textContent=computerScore;
+        isGameOver=false;
     }
 
-    rock_btn.onclick=  ()=>{
-        if(computer_choice==='Paper'){
-            computerScore++;
-        } else if(computer_choice==='Scissor') {
-            userScore++;
-        }
-        updateInfo();
-    };
+    let choice_arr=['Rock','Paper','Scissor'];
+    computer_choice=choice_arr[Math.floor(Math.random()*3)];
 
-    paper_btn.onclick=  ()=>{
-        if(computer_choice==='Scissor'){
-            computerScore++;
-        } else if(computer_choice==='Rock') {
-            userScore++;
-        }
-        updateInfo();
-    };
-
-    scissor_btn.onclick=  ()=>{
-        if(computer_choice==='Rock'){
-            computerScore++;
-        } else if(computer_choice==='Paper') {
-            userScore++;
-        }
-        updateInfo();
-    };
-
+    play_content.style.display="block";
+    winnerDisplay.textContent="";
+    comp_choice_display.textContent="";
 }
-document.getElementById("btn").addEventListener("click",play);
+function playRound(userChoice){
+    play_content.style.display="none";
+    comp_choice_display.textContent="Computer choice: "+computer_choice;
+
+    if(userChoice===computer_choice){
+        winnerDisplay.textContent="Round Tie!";
+    } else if((userChoice==='Rock' && computer_choice==='Scissor') || (userChoice==='Paper' && computer_choice==='Rock') || (userChoice==='Scissor' && computer_choice==='Paper')){
+        userScore++;
+        winnerDisplay.textContent="You won this round!";
+    } else {
+        computerScore++;
+        winnerDisplay.textContent="Computer won this round!";
+    }
+
+    userScoreDisplay.textContent=userScore;
+    computerScoreDisplay.textContent=computerScore;
+
+    if(userScore===5){
+        winnerDisplay.textContent="User wins the game!";
+        isGameOver=true;
+    } else if(computerScore===5){
+        winnerDisplay.textContent="Computer wins the game!";
+        isGameOver=true;
+    }
+}
+playBtn.addEventListener("click",play);
+
+rockBtn.addEventListener('click',() => playRound('Rock'));
+paperBtn.addEventListener('click',() => playRound('Paper'));
+scissorBtn.addEventListener('click',() => playRound('Scissor'));
